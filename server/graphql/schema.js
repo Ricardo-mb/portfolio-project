@@ -5,6 +5,8 @@ import {
   GraphQLList,
   GraphQLBoolean,
 } from "graphql";
+import { User } from "../models/userModels.js";
+import { Project } from "../models/projectModels.js";
 
 //Define the User type
 const UserType = new GraphQLObjectType({
@@ -27,36 +29,31 @@ const ProjectType = new GraphQLObjectType({
     description: { type: GraphQLString },
     imageUrl: { type: GraphQLString },
     projectUrl: { type: GraphQLString },
+    user: {
+      type: UserType,
+      resolve(parent, args) {
+        return User.findById(parent.user);
+      },
+    },
   },
 });
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
+    users: {
+      type: new GraphQLList(UserType),
+      resolve() {
+        //Code to get data from db
+        return User.find();
+      },
+    },
     user: {
       type: UserType,
       args: { id: { type: GraphQLString } },
       resolve(parent, args) {
-        //Code to get data from db/other source
-        const users = [
-          {
-            id: "1",
-            name: "Ricardo MBK",
-            email: "ricardomb@gmail.com",
-            isAdmin: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-          {
-            id: "2",
-            name: "Jane Doe",
-            email: "jane@example.com",
-            isAdmin: false,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-        ];
-        return users.find((user) => user.id === args.id);
+        //Code to get data from db/
+        return User.findById(args.id);
       },
     },
     project: {
@@ -64,45 +61,13 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLString } },
       resolve(parent, args) {
         //Code to get data from db/other source
-        const projects = [
-          {
-            id: "1",
-            title: "Project 1",
-            description: "Project 1 description",
-            imageUrl: "https://placehold.co/400",
-            projectUrl: "https://example.com/project1",
-          },
-          {
-            id: "2",
-            title: "Project 2",
-            description: "Project 2 description",
-            imageUrl: "https://placehold.co/400",
-            projectUrl: "https://example.com/project2",
-          },
-        ];
-        return projects.find((project) => project.id === args.id);
+        return Project.findById(args.id);
       },
     },
     projects: {
       type: new GraphQLList(ProjectType),
-      resolve(parent, args) {
-        const projects = [
-          {
-            id: "1",
-            title: "Project 1",
-            description: "Project 1 description",
-            imageUrl: "https://via.placeholder.com/150",
-            projectUrl: "https://example.com/project1",
-          },
-          {
-            id: "2",
-            title: "Project 2",
-            description: "Project 2 description",
-            imageUrl: "https://via.placeholder.com/150",
-            projectUrl: "https://example.com/project2",
-          },
-        ];
-        return projects;
+      resolve() {
+        return Project.find();
       },
     },
   },

@@ -24,7 +24,7 @@ const importData = async () => {
     });
     await Project.insertMany(sampleProjects);
 
-    console.log("Data Imported!".green.inverse);
+    console.log("Data Imported!".magenta.inverse);
 
     process.exit();
   } catch (error) {
