@@ -3,6 +3,7 @@ import {
   GraphQLString,
   GraphQLSchema,
   GraphQLList,
+  GraphQLBoolean,
 } from "graphql";
 
 //Define the User type
@@ -12,6 +13,9 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
+    isAdmin: { type: GraphQLBoolean },
+    createdAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString },
   },
 });
 //Define the Project type
@@ -35,8 +39,22 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         //Code to get data from db/other source
         const users = [
-          { id: "1", name: "John Doe", email: "john@example.com" },
-          { id: "2", name: "Jane Doe", email: "jane@example.com" },
+          {
+            id: "1",
+            name: "Ricardo MBK",
+            email: "ricardomb@gmail.com",
+            isAdmin: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: "2",
+            name: "Jane Doe",
+            email: "jane@example.com",
+            isAdmin: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
         ];
         return users.find((user) => user.id === args.id);
       },

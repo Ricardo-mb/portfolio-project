@@ -1,21 +1,21 @@
 import mongoose from "mongoose";
-const userSchema = new mongoose.Schema(
+const projectSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
     },
-    email: {
+    description: {
       type: String,
       required: true,
       unique: true,
     },
-    password: {
+    imageUrl: {
       type: String,
       required: true,
     },
-    isAdmin: {
-      type: Boolean,
+    projectUrl: {
+      type: String,
       required: true,
       default: false,
     },
@@ -24,3 +24,7 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+const Project = mongoose.model("Project", projectSchema);
+
+export { Project };
