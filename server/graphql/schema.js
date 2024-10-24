@@ -92,6 +92,8 @@ const Mutation = new GraphQLObjectType({
         return user.save();
       },
     },
+
+    //Add a new project
     addProject: {
       type: ProjectType,
       args: {
@@ -110,6 +112,31 @@ const Mutation = new GraphQLObjectType({
           user: args.user,
         });
         return project.save();
+      },
+    },
+    //Update existing project
+    updateProject: {
+      type: ProjectType,
+      args: {
+        id: { type: GraphQLString },
+        title: { type: GraphQLString },
+        description: { type: GraphQLString },
+        imageUrl: { type: GraphQLString },
+        projectUrl: { type: GraphQLString },
+        user: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        return Project.findByIdAndUpdate(
+          args.id,
+          {
+            title: args.title,
+            description: args.description,
+            imageUrl: args.imageUrl,
+            projectUrl: args.projectUrl,
+            user: args.user,
+          },
+          { new: true }
+        );
       },
     },
   },
