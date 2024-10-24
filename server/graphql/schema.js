@@ -73,9 +73,52 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    addUser: {
+      type: UserType,
+      args: {
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        isAdmin: { type: GraphQLBoolean },
+      },
+      resolve(parent, args) {
+        let user = new User({
+          name: args.name,
+          email: args.email,
+          isAdmin: args.isAdmin,
+        });
+        return user.save();
+      },
+    },
+    addProject: {
+      type: ProjectType,
+      args: {
+        title: { type: GraphQLString },
+        description: { type: GraphQLString },
+        imageUrl: { type: GraphQLString },
+        projectUrl: { type: GraphQLString },
+        user: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        let project = new Project({
+          title: args.title,
+          description: args.description,
+          imageUrl: args.imageUrl,
+          projectUrl: args.projectUrl,
+          user: args.user,
+        });
+        return project.save();
+      },
+    },
+  },
+});
+
 // The GraphQL Schema
 const schema = new GraphQLSchema({
   query: RootQuery,
+  mutation: Mutation,
 });
 
-export { RootQuery, UserType, ProjectType, schema };
+export { RootQuery, UserType, ProjectType, schema, Mutation };
